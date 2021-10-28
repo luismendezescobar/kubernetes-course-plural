@@ -30,7 +30,7 @@ resource "google_compute_instance" "gce_machine" {
   tags         = var.instance_tags
   description  = var.instance_description
 
-  metadata_startup_script = file(var.init_script)  
+  metadata_startup_script = var.init_script!= "" ? file(var.init_script) : ""
 
   allow_stopping_for_update = false
 
