@@ -24,7 +24,7 @@ variable "server_vm_info" {
     zone              = string
     name              = string
     static_internal_ip = string
-    external_ip        =list(string)
+    external_ip        =bool
     instance_type     = string
     source_image      = string
     boot_disk_size_gb = number    

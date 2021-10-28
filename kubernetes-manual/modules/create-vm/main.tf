@@ -54,12 +54,11 @@ resource "google_compute_instance" "gce_machine" {
 
   network_interface {
     subnetwork_project = var.subnetwork_project
-    subnetwork         = var.subnetwork    
-    #network_ip         = var.static_internal_ip == "" ? "" : google_compute_address.static_internal_address[0].address
+    subnetwork         = var.subnetwork        
     network_ip         = var.static_internal_ip
     
     dynamic "access_config" {
-      for_each=var.external_ip[0]=="true"?[1]:[]
+      for_each=var.external_ip==true?[1]:[]
       content{
         // Ephemeral public IP
       }

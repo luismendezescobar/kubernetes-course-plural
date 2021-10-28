@@ -24,6 +24,6 @@ variable "static_internal_ip" {
   type=string
 }
 variable "external_ip" {
-  type=list(string)
+  type=bool
 }
   
