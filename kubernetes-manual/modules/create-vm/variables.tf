@@ -20,10 +20,10 @@ variable "source_image" {type=string}
 variable "boot_disk_type" {type=string}
 variable "subnetwork_project" {type=string}
 variable "subnetwork" {type=string}
-
 variable "static_internal_ip" {
   type=string
 }
-
-
+variable "external_ip" {
+  type=string
+}
   

@@ -57,5 +57,12 @@ resource "google_compute_instance" "gce_machine" {
     subnetwork         = var.subnetwork    
     #network_ip         = var.static_internal_ip == "" ? "" : google_compute_address.static_internal_address[0].address
     network_ip         = var.static_internal_ip
+    
+    dynamic "external_ip" {
+      count=var.external_ip=="true"?1:0
+      access_config{
+        // Ephemeral public IP
+      }
+    }
   }
 }
