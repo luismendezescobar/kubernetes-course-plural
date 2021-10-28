@@ -22,7 +22,7 @@ resource "google_compute_firewall" "ssh" {
     protocol = "tcp"
     ports    = ["22"]
   }
-  source_ranges="0.0.0.0/0"
+  source_ranges=["0.0.0.0/0"]
 }
 
 resource "google_compute_firewall" "allow-all-between-kubernetes-cluster" {
@@ -37,8 +37,8 @@ resource "google_compute_firewall" "allow-all-between-kubernetes-cluster" {
   allow {
     protocol = "udp"
   }  
-  source_service_accounts = var.computer_account
-  target_service_accounts = var.computer_account
+  source_service_accounts = [var.computer_account]
+  target_service_accounts = [var.computer_account]
 }
 
 
