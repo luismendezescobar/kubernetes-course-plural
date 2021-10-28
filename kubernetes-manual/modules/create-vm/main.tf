@@ -32,7 +32,7 @@ resource "google_compute_instance" "gce_machine" {
 
   metadata_startup_script = var.init_script!= "" ? file(var.init_script) : ""
 
-  allow_stopping_for_update = false
+  allow_stopping_for_update = true
 
   boot_disk {
     auto_delete = var.auto_delete
