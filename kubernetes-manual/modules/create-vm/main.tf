@@ -59,7 +59,7 @@ resource "google_compute_instance" "gce_machine" {
     network_ip         = var.static_internal_ip
     
     dynamic "access_config" {
-      count=var.external_ip=="true"?1:0
+      for_each=var.external_ip[0]=="true"?[1]:[]
       content{
         // Ephemeral public IP
       }
