@@ -35,6 +35,7 @@ module "vm_instances_creation" {
   zone                      = each.value.zone
   instance_name             = each.value.name
   static_internal_ip        = each.value.static_internal_ip
+  external_ip               = each.value.external_ip
   instance_description      = each.value.description
   instance_tags             = each.value.instance_tags
   instance_machine_type     = each.value.instance_type
