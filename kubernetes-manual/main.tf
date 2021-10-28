@@ -31,8 +31,7 @@ module "vm_instances_creation" {
   for_each                  = local.instances_to_build
 
   source                    = "./modules/create-vm"  
-  project_id                = var.project_id
-  region                    = var.region
+  project_id                = var.project_id  
   zone                      = each.value.zone
   instance_name             = each.value.name
   static_internal_ip        = each.value.static_internal_ip
