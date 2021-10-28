@@ -14,7 +14,8 @@ module "network" {
   vpc_name      = var.vpc_name
   subnet_name   = var.subnet_name
   ip_cidr_range = var.ip_cidr_range
-  region        = var.region  
+  region        = var.region 
+  computer_account=var.computer_account 
 }
 
 
