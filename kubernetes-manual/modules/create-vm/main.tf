@@ -65,4 +65,7 @@ resource "google_compute_instance" "gce_machine" {
       }
     }
   }
+   service_account {      
+    scopes = ["cloud-platform"]
+  }
 }
