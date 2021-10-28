@@ -1,9 +1,9 @@
-project_id=""  #update the project here
+project_id="playground-s-11-ebb94c99"  #update the project here
 vpc_name="kubernetes-vpc"
 region="us-east1"
 subnet_name="kubernetes-us-east1"
 ip_cidr_range="172.16.94.0/24"
-computer_account=               #update the computer account here
+computer_account="508510210068-compute@developer.gserviceaccount.com" #update the computer account here
 
 
 server_vm_info = [
