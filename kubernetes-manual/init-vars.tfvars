@@ -50,8 +50,8 @@ server_vm_info = [
     additional_disks = []
   },
   {
-    zone              = "northamerica-northeast1-a"
-    name              = "us-east1-b"
+    zone              = "us-east1-b"
+    name              = "c1-node3"
     static_internal_ip="172.16.94.13"
     instance_type     = "e2-small"
     source_image      = "ubuntu-os-cloud/ubuntu-1804-lts"
