@@ -52,8 +52,6 @@ EOF
 #Review the Cluster configuration file, update the version to match what you've installed. 
 #We're using 1.21.0...if you're using a newer version update that here.
 vi ClusterConfiguration.yaml
-
-
 #Need to add CRI socket since there's a check for docker in the kubeadm init process, 
 #if you don't you'll get this error...
 #   error execution phase preflight: docker is required for container runtime: exec: "docker": executable file not found in $PATH
@@ -113,4 +111,62 @@ sudo more /etc/kubernetes/manifests/kube-apiserver.yaml
 
 
 #Check out the directory where the kubeconfig files live for each of the control plane pods.
+ls /etc/kubernetes
+
+
+########################################### all the comands in a single shot                #########################################################################################
+
+wget https://docs.projectcalico.org/manifests/calico.yaml
+
+
+#Look inside calico.yaml and find the setting for Pod Network IP address range CALICO_IPV4POOL_CIDR, 
+#adjust if needed for your infrastructure to ensure that the Pod network IP
+#range doesn't overlap with other networks in our infrastructure.
+vi calico.yaml
+
+kubeadm config print init-defaults | tee ClusterConfiguration.yaml
+
+sed -i 's/  advertiseAddress: 1.2.3.4/  advertiseAddress: 172.16.94.10/' ClusterConfiguration.yaml
+
+sed -i 's/  criSocket: \/var\/run\/dockershim\.sock/  criSocket: \/run\/containerd\/containerd\.sock/' ClusterConfiguration.yaml
+
+sed -i 's/  name: node/  name: c1-cp1/' ClusterConfiguration.yaml
+
+cat <<EOF | cat >> ClusterConfiguration.yaml
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+EOF
+
+#Review the Cluster configuration file, update the version to match what you've installed. 
+#We're using 1.21.0...if you're using a newer version update that here.
+vi ClusterConfiguration.yaml
+
+sudo kubeadm init \
+    --config=ClusterConfiguration.yaml \
+    --cri-socket /run/containerd/containerd.sock
+
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl apply -f calico.yaml
+
+kubectl get pods --all-namespaces
+
+kubectl get pods --all-namespaces --watch
+
+kubectl get pods --all-namespaces
+
+kubectl get nodes 
+
+sudo systemctl status kubelet.service 
+
+ls /etc/kubernetes/manifests
+
+sudo more /etc/kubernetes/manifests/etcd.yaml
+sudo more /etc/kubernetes/manifests/kube-apiserver.yaml
+
 ls /etc/kubernetes
