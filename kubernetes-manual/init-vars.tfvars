@@ -1,9 +1,9 @@
-project_id="playground-s-11-3b46d98f"  #update the project here
+project_id="playground-s-11-a2427d4f"  #update the project here
 vpc_name="kubernetes-vpc"
 region="us-east1"
 subnet_name="kubernetes-us-east1"
 ip_cidr_range="172.16.94.0/24"
-computer_account="186288675498-compute@developer.gserviceaccount.com" #update the computer account here
+computer_account="978072920621-compute@developer.gserviceaccount.com" #update the computer account here
 
 
 server_vm_info = [
@@ -52,7 +52,7 @@ server_vm_info = [
     instance_tags = []
     additional_disks = []
   },
-  {
+  /*{
     zone              = "us-east1-b"
     name              = "c1-node3"
     static_internal_ip="172.16.94.13"
@@ -66,5 +66,5 @@ server_vm_info = [
     init_script       = ""  
     instance_tags = []
     additional_disks = []
-  }
+  }*/
 ]

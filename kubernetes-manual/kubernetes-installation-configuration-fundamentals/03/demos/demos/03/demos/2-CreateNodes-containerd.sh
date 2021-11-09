@@ -160,3 +160,90 @@ kubectl get nodes
 #Just SSH into c1-node2 and c1-node3 and run the commands again.
 ssh aen@c1-node2
 #You can skip the token re-creation if you have one that's still valid.
+
+
+
+###############all commands in a single shot
+ssh aen@c1-node1
+
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF
+
+cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+
+sudo sysctl --system
+
+sudo apt-get update 
+sudo apt-get install -y containerd
+
+sudo mkdir -p /etc/containerd
+sudo containerd config default | sudo tee /etc/containerd/config.toml
+
+#At the end of this section
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+        ...
+#UPDATE: This line is now in the config.toml file
+#change it from SystemdCgroup = false to SystemdCgroup = true
+            SystemdCgroup = true
+
+sudo vi /etc/containerd/config.toml
+
+sudo systemctl restart containerd
+
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+
+sudo bash -c 'cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF'
+
+
+sudo apt-get update
+apt-cache policy kubelet | head -n 20 
+
+VERSION=1.21.0-00
+sudo apt-get install -y kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
+sudo apt-mark hold kubelet kubeadm kubectl containerd
+
+sudo systemctl status kubelet.service 
+sudo systemctl status containerd.service 
+
+sudo systemctl enable kubelet.service
+sudo systemctl enable containerd.service
+#Log out of c1-node1 and back on to c1-cp1
+exit
+
+kubeadm token list
+
+kubeadm token create
+
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+#You can also use print-join-command to generate token and print the join command in the proper format
+#COPY THIS INTO YOUR CLIPBOARD
+kubeadm token create --print-join-command
+#Back on the worker node c1-node1, using the Control Plane Node (API Server) IP address or name, the token and the cert has, let's join this Node to our cluster.
+ssh aen@c1-node1
+
+sudo kubeadm join 172.16.94.10:6443 \
+  --token xguxr9.zungfo8srvsxwk3h     \
+  --discovery-token-ca-cert-hash sha256:0735b1db947bcdc68e01feb38d9f1e16a02d26251c95908576ea2be31cd14946 
+
+#Log out of c1-node1 and back on to c1-cp1
+exit
+
+kubectl get nodes 
+
+kubectl get pods --all-namespaces --watch
+
+#GO BACK TO THE TOP AND DO THE SAME FOR c1-node2 and c1-node3
+#Just SSH into c1-node2 and c1-node3 and run the commands again.
+ssh aen@c1-node2
+#You can skip the token re-creation if you have one that's still valid.
