@@ -218,8 +218,8 @@ sudo systemctl status containerd.service
 
 sudo systemctl enable kubelet.service
 sudo systemctl enable containerd.service
-#Log out of c1-node1 and back on to c1-cp1
-exit
+#go back on to c1-cp1
+
 
 kubeadm token list
 

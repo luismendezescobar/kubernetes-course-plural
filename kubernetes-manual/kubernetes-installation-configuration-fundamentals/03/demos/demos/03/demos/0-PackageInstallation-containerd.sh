@@ -118,7 +118,7 @@ sudo systemctl enable containerd.service
 
 
 
-#---------------------------All commands in one shot-----------------------
+#---------------------------All commands in one shot these are run in c1-cp1-----------------------
 sudo modprobe overlay
 sudo modprobe br_netfilter
 
